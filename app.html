@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muevete con El Metro de Bogotá</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #C7C7C7;
+      text-align: left;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .contenedor {
+      max-width: 600px;
+      width: 100%;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      padding: 40px;
+      border-radius: 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: fadeIn 0.8s ease-in-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .contenedor {
+        max-width: 95%;
+        padding: 20px;
+        border-radius: 20px;
+      }
+    }
+
+
+    .contenedor::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.1), transparent);
+      animation: rotate 20s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 30px;
+      font-family: 'Orbitron', monospace;
+      letter-spacing: 2px;
+    }
+
+    .logo .logo-img {
+      margin-right: 20px;
+      margin-top: -10px;
+    }
+
+    .logo .titulo {
+      color: black;
+      font-family: 'Fredoka One', cursive;
+      font-size: 48px;
+      font-weight: 400;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+      background: none;
+      -webkit-background-clip: initial;
+      -webkit-text-fill-color: initial;
+      background-clip: initial;
+      animation: none;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .logo .titulo {
+        font-size: 32px;
+      }
+    }
+
+    @keyframes textGlow {
+      0% { filter: brightness(1); }
+      100% { filter: brightness(1.2); }
+    }
+
+    h3 {
+      color: black;
+      margin-bottom: 20px;
+      font-weight: 500;
+      font-size: 24px;
+      text-align: left;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 768px) {
+      h3 {
+        font-size: 20px;
+        margin-bottom: 15px;
+      }
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 16px 20px;
+      font-size: 16px;
+      font-weight: 500;
+      border: none;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      color: black;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    @media (max-width: 768px) {
+      button {
+        padding: 14px 16px;
+        font-size: 14px;
+        margin: 6px 0;
+      }
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s;
+    }
+
+    button:hover::before {
+      left: 100%;
+    }
+
+    button:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    button:active {
+      transform: translateY(-2px) scale(0.98);
+    }
+
+    img {
+      width: 100%;
+      border-radius: 25px;
+      margin-top: 30px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+      transition: all 0.5s ease;
+      border: 2px solid rgba(255,255,255,0.2);
+      filter: brightness(0.9) contrast(1.1);
+    }
+
+    @media (max-width: 768px) {
+      img {
+        margin-top: 20px;
+        border-radius: 15px;
+      }
+    }
+
+    img:hover {
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      filter: brightness(1) contrast(1.2);
+    }
+
+    .estado {
+      font-weight: bold;
+      padding: 5px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin: 5px;
+    }
+
+    .rojo {
+      color: white;
+      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    }
+
+    .naranja {
+      color: white;
+      background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    }
+
+    .verde {
+      color: white;
+      background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+    }
+
+    #estados {
+      margin-top: 30px;
+      padding: 25px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+      border-radius: 20px;
+      box-shadow: inset 0 4px 8px rgba(0,0,0,0.2), 0 8px 25px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    #estados h4 {
+      margin-bottom: 20px;
+      color: black;
+      font-weight: 600;
+      text-align: left;
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 768px) {
+      #estados h4 {
+        font-size: 16px;
+      }
+    }
+
+    #estados p {
+      margin: 12px 0;
+      font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: black;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      #estados p {
+        font-size: 14px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #pantalla2 div[style*="display: flex"] {
+        flex-direction: column;
+      }
+      #pantalla2 div[style*="display: flex"] > div {
+        margin: 0 0 10px 0 !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #pantallaMapa div[style*="display: flex"] {
+        flex-direction: column;
+      }
+      #pantallaMapa div[style*="display: flex"] button {
+        margin: 10px 0 !important;
+        padding: 16px !important;
+        font-size: 16px !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      #pantallaNecesidad div[style*="display: flex"] {
+        flex-direction: column;
+      }
+      #pantallaNecesidad div[style*="display: flex"] > div {
+        margin: 0 0 10px 0 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="contenedor">
+<div class="logo">
+  <div class="logo-img">
+    <img src="https://yt3.googleusercontent.com/Uhl70bbfnxdXSx4Ps9IvGvEFof7YCMFm9EIJTdjVbcXbYAix44-XvWgjPLU7P1Llu-BYDTfU5Q=s900-c-k-c0x00ffffff-no-rj" alt="Logo Metro Bogotá" style="width: 100px; height: auto;">
+  </div>
+  <div class="titulo">MUEVETE EN EL METRO DE TODOS</div>
+</div>
+    <div id="pantalla1">
+      <h3>En que estación estas:</h3>
+      <button onclick="seleccionarEstacion(14)">🚇 Estación 14 – Caracas con Calle 42/44</button>
+      <button onclick="seleccionarEstacion(1)" style="opacity: 0.5; cursor: not-allowed;">🚇 Estación 1 – Próximamente</button>
+      <button onclick="seleccionarEstacion(2)" style="opacity: 0.5; cursor: not-allowed;">🚇 Estación 2 – Próximamente</button>
+      <button onclick="seleccionarEstacion(3)" style="opacity: 0.5; cursor: not-allowed;">🚇 Estación 3 – Próximamente</button>
+      <button onclick="seleccionarEstacion(4)" style="opacity: 0.5; cursor: not-allowed;">🚇 Estación 4 – Próximamente</button>
+      <button onclick="seleccionarEstacion(5)" style="opacity: 0.5; cursor: not-allowed;">🚇 Estación 5 – Próximamente</button>
+      <button onclick="seleccionarEstacion(6)" style="opacity: 0.5; cursor: not-allowed;">🚇 Estación 6 – Próximamente</button>
+      <button onclick="seleccionarEstacion(7)" style="opacity: 0.5; cursor: not-allowed;">🚇 Estación 7 – Próximamente</button>
+      <button onclick="seleccionarEstacion(8)" style="opacity: 0.5; cursor: not-allowed;">🚇 Estación 8 – Próximamente</button>
+      <button onclick="seleccionarEstacion(9)" style="opacity: 0.5; cursor: not-allowed;">🚇 Estación 9 – Próximamente</button>
+      <button onclick="seleccionarEstacion(10)" style="opacity: 0.5; cursor: not-allowed;">🚇 Estación 10 – Próximamente</button>
+      <button onclick="seleccionarEstacion(11)" style="opacity: 0.5; cursor: not-allowed;">🚇 Estación 11 – Próximamente</button>
+      <button onclick="seleccionarEstacion(12)" style="opacity: 0.5; cursor: not-allowed;">🚇 Estación 12 – Próximamente</button>
+      <button onclick="seleccionarEstacion(13)" style="opacity: 0.5; cursor: not-allowed;">🚇 Estación 13 – Próximamente</button>
+      <button onclick="seleccionarEstacion(15)" style="opacity: 0.5; cursor: not-allowed;">🚇 Estación 15 – Próximamente</button>
+      <button onclick="seleccionarEstacion(16)" style="opacity: 0.5; cursor: not-allowed;">🚇 Estación 16 – Próximamente</button>
+    </div>
+
+    <div id="pantalla2" style="display:none;">
+      <h3>¿Qué necesitas?</h3>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+        <div style="flex: 1; margin-right: 10px;">
+          <button onclick="mostrarMapa('metro')" style="text-align: left;">🚇 Tomar Metro</button>
+          <button onclick="mostrarMapa('transmilenio')" style="text-align: left;">🚍 Tomar TransMilenio</button>
+          <button onclick="mostrarMapa('baño')" style="text-align: left;">🚻 Baños</button>
+        </div>
+        <div style="flex: 1; margin-left: 10px;">
+          <button onclick="mostrarMapa('comercio')" style="text-align: left;">🏬 Comercio</button>
+          <button onclick="mostrarMapa('bici')" style="text-align: left;">🚴‍♂️ Biciparqueaderos</button>
+          <button onclick="mostrarMapa('salida')" style="text-align: left;">🚪 Salir</button>
+        </div>
+      </div>
+      <button onclick="volverInicio()" style="width: 100%; text-align: center;">⬅️ Atrás</button>
+    </div>
+
+    <div id="pantallaMapa" style="display:none;">
+      <h3>¿Dónde Estás?</h3>
+      <img src="img/metroEdificios.jpg" alt="Mapa Estación 14" style="width: 100%; border-radius: 25px; margin-top: 20px; margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-around;">
+        <button onclick="seleccionarEdificio('D1')" style="flex: 1; margin: 0 10px; padding: 20px; font-size: 18px;">🏢 Edificio D1</button>
+        <button onclick="seleccionarEdificio('D2')" style="flex: 1; margin: 0 10px; padding: 20px; font-size: 18px;">🏢 Edificio D2</button>
+        <button onclick="seleccionarEdificio('A')" style="flex: 1; margin: 0 10px; padding: 20px; font-size: 18px;">🏢 Edificio A</button>
+      </div>
+      <button onclick="volverInicio()" style="width: 100%; text-align: center; margin-top: 10px;">⬅️ Atrás</button>
+    </div>
+
+    <div id="pantallaPiso" style="display:none;">
+      <h3 id="tituloPiso">¿En qué piso estás?</h3>
+      <div id="botonesPiso"></div>
+      <button onclick="volverMapa()" style="width: 100%; text-align: center; margin-top: 20px;">⬅️ Atrás</button>
+    </div>
+
+    <div id="pantallaNecesidad" style="display:none;">
+      <h3>¿Qué necesitas?</h3>
+      <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+        <div style="flex: 1; margin-right: 10px;">
+          <button onclick="mostrarRuta('metro')" style="text-align: left;">🚇 Tomar Metro</button>
+          <button onclick="mostrarRuta('transmilenio')" style="text-align: left;">🚍 Tomar TransMilenio</button>
+          <button onclick="mostrarRuta('baño')" style="text-align: left;">🚻 Baños</button>
+        </div>
+        <div style="flex: 1; margin-left: 10px;">
+          <button onclick="mostrarRuta('comercio')" style="text-align: left;">🏬 Comercio</button>
+          <button onclick="mostrarRuta('bici')" style="text-align: left;">🚴‍♂️ Biciparqueaderos</button>
+          <button onclick="mostrarRuta('salida')" style="text-align: left;">🚪 Salir</button>
+        </div>
+      </div>
+      <button onclick="volverPiso()" style="width: 100%; text-align: center;">⬅️ Atrás</button>
+    </div>
+
+    <div id="resultado" style="display:none;">
+      <h3 id="accion" style="color: black; margin-bottom: 10px;"></h3>
+      <img id="imagenPiso" src="" alt="Mapa del piso" style="width: 100%; border-radius: 25px; margin-top: 20px; margin-bottom: 10px;">
+      <div id="indicadores" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px;"></div>
+      <div id="rutaPasoAPaso"></div>
+      <button onclick="volverNecesidad()">⬅️ Regresar</button>
+    </div>
+  </div>
+
+  <script>
+    let edificioSeleccionado = '';
+    let pisoSeleccionado = '';
+
+    function seleccionarEstacion(estacion) {
+      if (estacion === 14) {
+        document.getElementById("pantalla1").style.display = "none";
+        document.getElementById("pantallaMapa").style.display = "block";
+      } else {
+        alert("Esta estación aún no está disponible. Solo la Estación 14 tiene funcionalidad completa.");
+      }
+    }
+
+
+    function seleccionarEdificio(edificio) {
+      edificioSeleccionado = edificio;
+      document.getElementById("pantallaMapa").style.display = "none";
+      document.getElementById("pantallaPiso").style.display = "block";
+      mostrarBotonesPiso(edificio);
+    }
+
+    function mostrarBotonesPiso(edificio) {
+      const botonesPiso = document.getElementById("botonesPiso");
+      botonesPiso.innerHTML = '';
+
+      let pisos = [];
+      if (edificio === 'A') {
+        pisos = ['Sótano', 'Piso 1', 'Piso 2', 'Piso 3'];
+      } else {
+        pisos = ['Piso 1', 'Piso 2', 'Piso 3'];
+      }
+
+      pisos.forEach(piso => {
+        const button = document.createElement('button');
+        button.textContent = piso;
+        button.onclick = () => seleccionarPiso(piso);
+        botonesPiso.appendChild(button);
+      });
+    }
+
+    function seleccionarPiso(piso) {
+      pisoSeleccionado = piso;
+      document.getElementById("pantallaPiso").style.display = "none";
+      document.getElementById("pantallaNecesidad").style.display = "block";
+    }
+
+    function getImageSrc(edificio, piso) {
+      let prefix = edificio;
+      let suffix = '';
+      if (piso === 'Sótano') suffix = 'SOTANO';
+      else if (piso === 'Piso 1') suffix = 'PRIMERO';
+      else if (piso === 'Piso 2') suffix = 'SEGUNDO';
+      else if (piso === 'Piso 3') suffix = 'TERCERO';
+      return prefix + suffix + '.png';
+    }
+
+    function mostrarRuta(necesidad) {
+      document.getElementById("pantallaNecesidad").style.display = "none";
+      document.getElementById("resultado").style.display = "block";
+
+      document.getElementById("imagenPiso").src = "img/" + getImageSrc(edificioSeleccionado, pisoSeleccionado);
+
+      mostrarIndicadores(edificioSeleccionado, pisoSeleccionado);
+
+      const rutas = generarRuta(edificioSeleccionado, pisoSeleccionado, necesidad);
+      document.getElementById("accion").innerText = rutas.titulo;
+      document.getElementById("rutaPasoAPaso").innerHTML = rutas.pasos;
+    }
+
+    function generarRuta(edificio, piso, necesidad) {
+      // Datos de servicios por edificio y piso
+      const serviciosPorEdificio = {
+        'A': {
+          'Sótano': ['comercio', 'bici'],
+          'Piso 1': ['comercio'],
+          'Piso 2': ['comercio', 'baño', 'metro', 'transmilenio'],
+          'Piso 3': ['comercio', 'metro']
+        },
+        'D1': {
+          'Piso 1': ['comercio'],
+          'Piso 2': ['comercio', 'baño', 'metro', 'transmilenio'],
+          'Piso 3': ['comercio', 'metro']
+        },
+        'D2': {
+          'Piso 1': ['comercio'],
+          'Piso 2': ['metro', 'transmilenio'],
+          'Piso 3': ['metro']
+        }
+      };
+
+      const rutasBase = {
+        metro: { titulo: "Ruta para tomar el Metro 🚇" },
+        transmilenio: { titulo: "Ruta para tomar TransMilenio 🚍" },
+        baño: { titulo: "Ruta hacia los Baños 🚻" },
+        comercio: { titulo: "Ruta hacia el Comercio 🏬" },
+        bici: { titulo: "Ruta hacia los Biciparqueaderos 🚴‍♂️" },
+        salida: { titulo: "Ruta hacia la Salida 🚪" }
+      };
+
+      const titulo = rutasBase[necesidad].titulo;
+      let pasos = `<p>Estás en: Edificio ${edificio}, ${piso}</p>`;
+
+      // Función para calcular navegación entre pisos
+      function calcularNavegacion(origen, destino, edificio) {
+        const pisosOrden = edificio === 'A' ? ['Sótano', 'Piso 1', 'Piso 2', 'Piso 3'] : ['Piso 1', 'Piso 2', 'Piso 3'];
+        const indiceOrigen = pisosOrden.indexOf(origen);
+        const indiceDestino = pisosOrden.indexOf(destino);
+
+        if (indiceOrigen < indiceDestino) {
+          const numPisos = indiceDestino - indiceOrigen;
+          return numPisos === 1 ? 'Sube 1 piso' : `Sube ${numPisos} pisos`;
+        } else if (indiceOrigen > indiceDestino) {
+          const numPisos = indiceOrigen - indiceDestino;
+          return numPisos === 1 ? 'Baja 1 piso' : `Baja ${numPisos} pisos`;
+        } else {
+          return 'Estás en el piso correcto';
+        }
+      }
+
+      // Función para encontrar el piso correcto para un servicio
+      function encontrarPisoServicio(edificio, necesidad) {
+        const edificioData = serviciosPorEdificio[edificio];
+        for (const piso in edificioData) {
+          if (edificioData[piso].includes(necesidad)) {
+            return piso;
+          }
+        }
+        return null;
+      }
+
+      // Lógica específica por necesidad
+      if (necesidad === 'metro') {
+        if (edificio === 'D1' && piso === 'Piso 1') {
+          pasos += '<ol><li>Sube 1 piso para validar tu pasaje</li><li>Sube 1 piso más para llegar a la plataforma</li><li>Los edificios D son hacia el sentido Sur</li><li>Sigue las señales hacia los andenes</li></ol>';
+        } else if (edificio === 'D1' && piso === 'Piso 2') {
+          pasos += '<ol><li>Valida tu pasaje</li><li>Sube 1 piso para llegar a la plataforma</li><li>Los edificios D son hacia el sentido Sur</li><li>Sigue las señales hacia los andenes</li></ol>';
+        } else if (edificio === 'D2' && piso === 'Piso 1') {
+          pasos += '<ol><li>Sube 1 piso para validar tu pasaje</li><li>Sube 1 piso más para llegar a la plataforma</li><li>Los edificios D son hacia el sentido Sur</li><li>Sigue las señales hacia los andenes</li></ol>';
+        } else if (edificio === 'D2' && piso === 'Piso 2') {
+          pasos += '<ol><li>Valida tu pasaje</li><li>Sube 1 piso para llegar a la plataforma</li><li>Los edificios D son hacia el sentido Sur</li><li>Sigue las señales hacia los andenes</li></ol>';
+        } else if (edificio === 'A' && piso === 'Piso 1') {
+          pasos += '<ol><li>Sube 1 piso para validar tu pasaje</li><li>Sube 1 piso más para llegar a la plataforma</li><li>El edificio A es hacia el sentido Norte</li><li>Sigue las señales hacia los andenes</li></ol>';
+        } else {
+          const pisoObjetivo = encontrarPisoServicio(edificio, 'metro');
+          if (pisoObjetivo) {
+            if (piso === pisoObjetivo) {
+              pasos += '<ol><li>Estás en la plataforma del Metro</li><li>Sigue las señales hacia los andenes</li></ol>';
+            } else {
+              pasos += '<ol><li>' + calcularNavegacion(piso, pisoObjetivo, edificio) + '</li><li>Sigue las señales hacia los andenes</li><li>El Metro está disponible en este piso</li></ol>';
+            }
+          } else {
+            pasos += '<ol><li>El Metro no está disponible en este edificio</li><li>Dirígete a otro edificio</li></ol>';
+          }
+        }
+      } else if (necesidad === 'transmilenio') {
+        if (edificio === 'D1' && piso === 'Piso 1') {
+          pasos += '<ol><li>Sube 1 piso para validar tu pasaje</li><li>Baja por las escaleras para llegar a la Estación TransMilenio Calle 45</li><li>Sigue las señales hacia las plataformas</li></ol>';
+        } else if (edificio === 'D1' && piso === 'Piso 2') {
+          pasos += '<ol><li>Valida tu pasaje</li><li>Baja por las escaleras para llegar a la Estación TransMilenio Calle 45</li><li>Sigue las señales hacia las plataformas</li></ol>';
+        } else if (edificio === 'D2' && piso === 'Piso 1') {
+          pasos += '<ol><li>TransMilenio solo lo puedes tomar a través del edificio D1</li><li>Dirígete al Edificio D1</li></ol>';
+        } else if (edificio === 'D2' && piso === 'Piso 2') {
+          pasos += '<ol><li>TransMilenio solo se puede tomar desde el Edificio D1</li><li>Dirígete al Edificio D1</li></ol>';
+        } else if (edificio === 'A' && piso === 'Piso 1') {
+          pasos += '<ol><li>Sube 1 piso para validar tu pasaje</li><li>Baja por las escaleras para llegar a la Estación TransMilenio Calle 45</li><li>Sigue las señales hacia las plataformas</li></ol>';
+        } else {
+          const pisoObjetivo = encontrarPisoServicio(edificio, 'transmilenio');
+          if (pisoObjetivo) {
+            if (piso === pisoObjetivo) {
+              pasos += '<ol><li>Estás en el acceso a TransMilenio</li><li>Sigue las señales hacia las plataformas</li></ol>';
+            } else {
+              pasos += '<ol><li>' + calcularNavegacion(piso, pisoObjetivo, edificio) + '</li><li>Sigue las señales hacia las plataformas de TransMilenio</li></ol>';
+            }
+          } else {
+            pasos += '<ol><li>TransMilenio no está disponible en este edificio</li><li>Dirígete a otro edificio</li></ol>';
+          }
+        }
+      } else if (necesidad === 'baño') {
+        if (edificio === 'D1' && piso === 'Piso 1') {
+          pasos += '<ol><li>Sube 1 piso</li><li>El baño está disponible en este piso</li><li>Busca los letreros indicadores</li></ol>';
+        } else if (edificio === 'D1' && piso === 'Piso 2') {
+          pasos += '<ol><li>El baño está disponible en este piso</li><li>Busca los letreros indicadores</li></ol>';
+        } else if (edificio === 'D2' && piso === 'Piso 1') {
+          pasos += '<ol><li>Los baños solo están disponibles en el edificio D1</li><li>Dirígete al Edificio D1</li></ol>';
+        } else if (edificio === 'D2' && piso === 'Piso 2') {
+          pasos += '<ol><li>Los baños no están disponibles en este edificio</li><li>Dirígete al Edificio D1</li></ol>';
+        } else {
+          const pisoObjetivo = encontrarPisoServicio(edificio, 'baño');
+          if (pisoObjetivo) {
+            if (piso === pisoObjetivo) {
+              pasos += '<ol><li>El baño está disponible en este piso</li><li>Busca los letreros indicadores</li></ol>';
+            } else {
+              pasos += '<ol><li>' + calcularNavegacion(piso, pisoObjetivo, edificio) + '</li><li>El baño está disponible en este piso</li><li>Busca los letreros indicadores</li></ol>';
+            }
+          } else {
+            pasos += '<ol><li>Los baños no están disponibles en este edificio</li><li>Dirígete a otro edificio</li></ol>';
+          }
+        }
+      } else if (necesidad === 'comercio') {
+        if (edificio === 'D1' && piso === 'Piso 1') {
+          pasos += '<ol><li>El comercio está disponible en este piso</li><li>También hay comercio en el segundo piso</li><li>Busca las tiendas a tu alrededor</li></ol>';
+        } else if (edificio === 'D1' && piso === 'Piso 2') {
+          pasos += '<ol><li>El comercio ya está disponible en este piso</li><li>Busca las tiendas a tu alrededor</li></ol>';
+        } else if (edificio === 'D2' && piso === 'Piso 1') {
+          pasos += '<ol><li>El comercio está disponible en este piso</li><li>Busca las tiendas a tu alrededor</li></ol>';
+        } else if (edificio === 'D2' && piso === 'Piso 2') {
+          pasos += '<ol><li>El comercio solo está disponible en el primer piso</li><li>Baja 1 piso</li></ol>';
+        } else {
+          pasos += '<ol><li>El comercio está disponible en este piso</li><li>Busca las tiendas a tu alrededor</li></ol>';
+        }
+      } else if (necesidad === 'bici') {
+        if (edificio === 'D1' && piso === 'Piso 1') {
+          pasos += '<ol><li>Los biciparqueaderos solo están disponibles en el Edificio A</li><li>Sube al segundo piso</li><li>Pasa el túnel hacia el Edificio A</li><li>Baja 2 pisos hasta el sótano</li><li>Sigue las señales hacia los biciparqueaderos</li></ol>';
+        } else if (edificio === 'D1' && piso === 'Piso 2') {
+          pasos += '<ol><li>Los biciparqueaderos solo están disponibles en el Edificio A</li><li>Pasa el túnel hacia el Edificio A</li><li>Baja 2 pisos hasta el sótano</li><li>Sigue las señales hacia los biciparqueaderos</li></ol>';
+        } else if (edificio === 'D2' && piso === 'Piso 1') {
+          pasos += '<ol><li>Los biciparqueaderos solo están disponibles en el sótano A</li><li>Para llegar al A lo puedes hacer a través del edificio D1</li><li>En el segundo piso toma el túnel hacia edificio A</li><li>Baja 2 pisos para llegar al sótano</li></ol>';
+        } else if (edificio === 'D2' && piso === 'Piso 2') {
+          pasos += '<ol><li>Los biciparqueaderos solo están disponibles en el sótano A</li><li>Para llegar al A lo puedes hacer a través del edificio D1</li><li>En el segundo piso toma el túnel hacia edificio A</li><li>Baja 2 pisos para llegar al sótano</li></ol>';
+        } else {
+          const pisoObjetivo = encontrarPisoServicio(edificio, 'bici');
+          if (pisoObjetivo) {
+            if (piso === pisoObjetivo) {
+              pasos += '<ol><li>Los biciparqueaderos están en este piso</li><li>Sigue las señales hacia el sótano</li></ol>';
+            } else {
+              pasos += '<ol><li>' + calcularNavegacion(piso, pisoObjetivo, edificio) + '</li><li>Los biciparqueaderos están ubicados en el sótano</li></ol>';
+            }
+          } else {
+            pasos += '<ol><li>Los biciparqueaderos no están disponibles en este edificio</li><li>Dirígete al Edificio A</li></ol>';
+          }
+        }
+      } else if (necesidad === 'salida') {
+        if (edificio === 'D1' && piso === 'Piso 2') {
+          pasos += '<ol><li>La salida esta disponible en este piso, Dirígete a la calle más cercana.</li></ol>';
+        } else if (edificio === 'D1' && piso === 'Piso 3') {
+          pasos += '<ol><li>Baja 2 pisos y sigue las señales de salida. Dirígete a la calle más cercana.</li></ol>';
+        } else if (edificio === 'A' && piso === 'Piso 1') {
+          pasos += '<ol><li>La salida esta disponible en este piso, Dirígete a la calle más cercana.</li></ol>';
+        } else {
+          pasos += '<ol><li>Baja 1 piso y sigue las señales de salida. Dirígete a la calle más cercana.</li></ol>';
+        }
+      }
+
+      // Rutas específicas para D1 Piso 3
+      if (edificio === 'D1' && piso === 'Piso 3') {
+        if (necesidad === 'metro') {
+          pasos = '<p>Estás en: Edificio D1, Piso 3</p><ol><li>Ya estás en la plataforma sentido Sur</li><li>Sigue las señales hacia los andenes</li></ol>';
+        } else if (necesidad === 'transmilenio') {
+          pasos = '<p>Estás en: Edificio D1, Piso 3</p><ol><li>Baja 1 piso</li><li>Valida tu pasaje</li><li>Baja por las escaleras para llegar a la Estación TransMilenio Calle 45</li><li>Sigue las señales hacia las plataformas</li></ol>';
+        } else if (necesidad === 'baño') {
+          pasos = '<p>Estás en: Edificio D1, Piso 3</p><ol><li>Baja 1 piso</li><li>El baño está disponible en este piso</li><li>Busca los letreros indicadores</li></ol>';
+        } else if (necesidad === 'comercio') {
+          pasos = '<p>Estás en: Edificio D1, Piso 3</p><ol><li>El comercio ya está disponible en este piso</li><li>Busca las tiendas a tu alrededor</li></ol>';
+        } else if (necesidad === 'bici') {
+          pasos = '<p>Estás en: Edificio D1, Piso 3</p><ol><li>Los biciparqueaderos solo están disponibles en el Edificio A</li><li>Baja 1 piso</li><li>Pasa el túnel hacia el Edificio A</li><li>Baja 2 pisos hasta el sótano</li><li>Sigue las señales hacia los biciparqueaderos</li></ol>';
+        }
+      }
+
+      // Rutas específicas para D2 Piso 3
+      if (edificio === 'D2' && piso === 'Piso 3') {
+        if (necesidad === 'metro') {
+          pasos = '<p>Estás en: Edificio D2, Piso 3</p><ol><li>Ya estoy en la plataforma hacia sentido sur</li><li>Sigue las señales hacia los andenes</li></ol>';
+        } else if (necesidad === 'transmilenio') {
+          pasos = '<p>Estás en: Edificio D2, Piso 3</p><ol><li>TransMilenio solo se puede tomar desde el Edificio D1</li><li>Dirígete al Edificio D1</li></ol>';
+        } else if (necesidad === 'baño') {
+          pasos = '<p>Estás en: Edificio D2, Piso 3</p><ol><li>Los baños no están disponibles en este edificio</li><li>Dirígete al Edificio D1</li></ol>';
+        } else if (necesidad === 'comercio') {
+          pasos = '<p>Estás en: Edificio D2, Piso 3</p><ol><li>El comercio solo está disponible en el primer piso</li><li>Baja 2 pisos</li></ol>';
+        } else if (necesidad === 'bici') {
+          pasos = '<p>Estás en: Edificio D2, Piso 3</p><ol><li>Los biciparqueaderos solo están disponibles en el sótano A</li><li>Para llegar al A lo puedes hacer a través del edificio D1</li><li>En el segundo piso toma el túnel hacia edificio A</li><li>Baja 2 pisos para llegar al sótano</li></ol>';
+        } else if (necesidad === 'salida') {
+          pasos = '<p>Estás en: Edificio D2, Piso 3</p><ol><li>Baja 2 pisos y sigue las señales de salida. Dirígete a la calle más cercana.</li></ol>';
+        }
+      }
+
+      // Rutas específicas para A Sótano
+      if (edificio === 'A' && piso === 'Sótano') {
+        if (necesidad === 'metro') {
+          pasos = '<p>Estás en: Edificio A, Sótano</p><ol><li>Sube 2 pisos</li><li>Valida el pasaje</li><li>Luego sube 1 piso para llegar a la plataforma sentido norte</li><li>Mira las indicaciones para el andén</li></ol>';
+        } else if (necesidad === 'transmilenio') {
+          pasos = '<p>Estás en: Edificio A, Sótano</p><ol><li>Sube 2 pisos</li><li>Valida el pasaje y baja por las escaleras para llegar a la estación de la Calle 45</li></ol>';
+        } else if (necesidad === 'baño') {
+          pasos = '<p>Estás en: Edificio A, Sótano</p><ol><li>Sube 2 pisos</li><li>En este piso ya están disponibles los baños</li><li>Sigue los carteles</li></ol>';
+        } else if (necesidad === 'comercio') {
+          pasos = '<p>Estás en: Edificio A, Sótano</p><ol><li>En este piso está disponible el comercio</li><li>Busca a tu alrededor</li></ol>';
+        } else if (necesidad === 'bici') {
+          pasos = '<p>Estás en: Edificio A, Sótano</p><ol><li>Baja 2 pisos</li><li>En este piso estarán los biciparqueaderos</li><li>Sigue las instrucciones</li></ol>';
+        } else if (necesidad === 'salida') {
+          pasos = '<p>Estás en: Edificio A, Sótano</p><ol><li>Sube 1 piso y sigue las señales de salida. Dirígete a la calle más cercana.</li></ol>';
+        }
+      }
+
+      // Rutas específicas para A Piso 2
+      if (edificio === 'A' && piso === 'Piso 2') {
+        if (necesidad === 'metro') {
+          pasos = '<p>Estás en: Edificio A, Piso 2</p><ol><li>Valida tu pasaje</li><li>Sube 1 piso para llegar a la plataforma con dirección norte</li><li>Sigue las indicaciones hacia los andenes</li></ol>';
+        } else if (necesidad === 'transmilenio') {
+          pasos = '<p>Estás en: Edificio A, Piso 2</p><ol><li>Valida tu pasaje</li><li>Baja por las escaleras para llegar a la Estación TransMilenio Calle 45</li></ol>';
+        } else if (necesidad === 'baño') {
+          pasos = '<p>Estás en: Edificio A, Piso 2</p><ol><li>En este piso hay baños disponibles</li><li>Sigue las señales indicadoras</li></ol>';
+        } else if (necesidad === 'comercio') {
+          pasos = '<p>Estás en: Edificio A, Piso 2</p><ol><li>En este piso hay zonas de comercio disponibles</li><li>También puedes encontrar más locales en el piso 1</li></ol>';
+        } else if (necesidad === 'bici') {
+          pasos = '<p>Estás en: Edificio A, Piso 2</p><ol><li>Baja 2 pisos</li><li>En este piso estarán los biciparqueaderos</li><li>Sigue las instrucciones</li></ol>';
+        } else if (necesidad === 'salida') {
+          pasos = '<p>Estás en: Edificio A, Piso 2</p><ol><li>Baja 1 piso y sigue las señales de salida. Dirígete a la calle más cercana.</li></ol>';
+        }
+      }
+
+      // Rutas específicas para A Piso 3
+      if (edificio === 'A' && piso === 'Piso 3') {
+        if (necesidad === 'metro') {
+          pasos = '<p>Estás en: Edificio A, Piso 3</p><ol><li>Ya estás en la plataforma con dirección norte</li><li>Solo sigue los carteles para llegar a los andenes</li></ol>';
+        } else if (necesidad === 'transmilenio') {
+          pasos = '<p>Estás en: Edificio A, Piso 3</p><ol><li>Baja 1 piso para validar tu pasaje</li><li>Baja por las escaleras para llegar a la Estación TransMilenio Calle 45</li><li>Sigue las señales hacia las plataformas</li></ol>';
+        } else if (necesidad === 'baño') {
+          pasos = '<p>Estás en: Edificio A, Piso 3</p><ol><li>Baja 1 piso</li><li>Sigue las señales de indicación</li></ol>';
+        } else if (necesidad === 'comercio') {
+          pasos = '<p>Estás en: Edificio A, Piso 3</p><ol><li>En este piso hay locales disponibles</li><li>Busca el más cercano</li></ol>';
+        } else if (necesidad === 'bici') {
+          pasos = '<p>Estás en: Edificio A, Piso 3</p><ol><li>Baja 3 pisos</li><li>En este piso estarán los biciparqueaderos</li><li>Sigue las indicaciones</li></ol>';
+        } else if (necesidad === 'salida') {
+          pasos = '<p>Estás en: Edificio A, Piso 3</p><ol><li>Baja 3 pisos y sigue las señales de salida. Dirígete a la calle más cercana.</li></ol>';
+        }
+      }
+
+      return { titulo, pasos };
+    }
+
+    function volverInicio() {
+      document.getElementById("pantallaMapa").style.display = "none";
+      document.getElementById("pantalla1").style.display = "block";
+      edificioSeleccionado = '';
+      pisoSeleccionado = '';
+    }
+
+    function volverMapa() {
+      document.getElementById("pantallaPiso").style.display = "none";
+      document.getElementById("pantallaMapa").style.display = "block";
+      edificioSeleccionado = '';
+    }
+
+    function volverPiso() {
+      document.getElementById("pantallaNecesidad").style.display = "none";
+      document.getElementById("pantallaPiso").style.display = "block";
+    }
+
+    function mostrarIndicadores(edificio, piso) {
+      const indicadoresDiv = document.getElementById("indicadores");
+      indicadoresDiv.innerHTML = '';
+
+      const indicadores = {
+        'D1': {
+          'Piso 1': ['🟠 Comercio', '⬆️ Entrada / Salida edificio', '⮃ Escaleras'],
+          'Piso 2': ['🟠 Comercio', '🔵 Baños', '🔴 Entrada / Salida TransMilenio', '🟡 Entrada / Salida Metro', '⮃ Escaleras'],
+          'Piso 3': ['🟢 Plataforma', '🟠 Comercio', '⮃ Escaleras']
+        },
+        'D2': {
+          'Piso 1': ['🟠 Comercio', '⬆️ Entrada / Salida edificio', '⮃ Escaleras'],
+          'Piso 2': ['🟡 Entrada / Salida Metro', '⮃ Escaleras'],
+          'Piso 3': ['🟢 Plataforma', '⮃ Escaleras']
+        },
+        'A': {
+          'Sótano': ['🟠 Comercio', '🟣 Biciparqueadero', '⮃ Escaleras'],
+          'Piso 1': ['🟠 Comercio', '⬆️ Entrada / Salida edificio', '⮃ Escaleras'],
+          'Piso 2': ['🔵 Baños', '🟡 Entrada / Salida Metro', '🔴 Entrada / Salida TransMilenio', '🟠 Comercio', '⮃ Escaleras'],
+          'Piso 3': ['🟠 Comercio', '🟢 Plataforma', '⮃ Escaleras']
+        }
+      };
+
+      if (indicadores[edificio] && indicadores[edificio][piso]) {
+        indicadores[edificio][piso].forEach(indicador => {
+          const span = document.createElement('span');
+          span.textContent = indicador;
+          span.style.fontSize = '14px';
+          span.style.margin = '5px';
+          indicadoresDiv.appendChild(span);
+        });
+      }
+    }
+
+    function volverNecesidad() {
+      document.getElementById("resultado").style.display = "none";
+      document.getElementById("pantallaNecesidad").style.display = "block";
+    }
+  </script>
+</body>
+</html>
